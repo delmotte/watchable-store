@@ -7,17 +7,18 @@ const Rx = require('rx');
  * @param o the object to deep freeze
  * @returns {*}
  */
-Object.prototype.deepFreeze = function(o) {
-    Object.freeze(o);
-    Object.getOwnPropertyNames(o).forEach(function (prop) {
-        if (o.hasOwnProperty(prop)
-            && o[prop] !== null
-            && (typeof o[prop] === "object" || typeof o[prop] === "function")
-            && !Object.isFrozen(o[prop])) {
-            Object.deepFreeze(o[prop]);
-        }
-    });
-    return o;
+function deepFreeze (o) {
+  Object.freeze(o);
+
+  Object.getOwnPropertyNames(o).forEach(function (prop) {
+    if (o[prop] !== null
+    && (typeof o[prop] === "object" || typeof o[prop] === "function")
+    && !Object.isFrozen(o[prop])) {
+      deepFreeze(o[prop]);
+    }
+  });
+
+  return o;
 };
 
 /**
@@ -42,7 +43,7 @@ function BaseStore(initialData) {
             return initialData;
         },
         set data(t) {
-            initialData = Object.deepFreeze(t);
+            initialData = deepFreeze(t);
             _observer.next(initialData);
         },
         data$: Rx.Observable.create(observer => _observer = observer).share()
