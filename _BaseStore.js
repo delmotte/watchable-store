@@ -37,6 +37,7 @@ function deepFreeze(o) {
 function BaseStore(initialData, options = {}) {
     let _observer = null;
     const data$ = Rx.Observable.create(observer => _observer = observer).share();
+
     return {
         get data() {
             return initialData;
