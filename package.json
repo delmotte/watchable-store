@@ -1,0 +1,22 @@
+{
+  "name": "watchable-store",
+  "version": "1.0.0",
+  "description": "",
+  "main": "_BaseStore.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delmotte/observable-store.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/delmotte/observable-store/issues"
+  },
+  "homepage": "https://github.com/delmotte/observable-store#readme",
+  "dependencies": {
+    "rx": "^4.1.0"
+  }
+}
