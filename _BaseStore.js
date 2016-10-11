@@ -30,8 +30,8 @@ function deepFreeze(o) {
  *
  * You can subscribe to data$ to be notified when data change
  * Example :
- * let subscription = store.data$.subscribe(success, error)
- * subscription.dispose() // when you're done with it
+ * let subscription = store.watch(cb)
+ * store.unwatch(subscription) // when you're done with it
  *
  */
 function BaseStore(initialData, options = {}) {
