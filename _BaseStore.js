@@ -1,7 +1,5 @@
 'use strict';
 
-const Rx = require('rx');
-
 /**
  *
  * @param o the object to deep freeze
@@ -35,8 +33,8 @@ function deepFreeze(o) {
  *
  */
 function BaseStore(initialData, options = {}) {
-    let _observer = null;
-    const data$ = Rx.Observable.create(observer => _observer = observer).share();
+    const handlers = [];
+    let nextHandlerId = 0;
 
     return {
         get data() {
@@ -44,13 +42,25 @@ function BaseStore(initialData, options = {}) {
         },
         set data(t) {
             initialData = options.disableDeepFreeze ? t : deepFreeze(t);
-            _observer.next(initialData);
+            handlers.forEach(handler => {
+                handler.handler(initialData);
+            });
         },
         watch(cb) {
-            return data$.subscribe(cb);
+            let ID = nextHandlerId++;
+            handlers.push({
+                id: ID,
+                handler: cb
+            });
+            return ID;
         },
-        unwatch(handle) {
-            handle.dispose();
+        unwatch(id) {
+            for (let i = 0; i < handlers.length; i++) {
+                if (handlers[i].id === id) {
+                    handlers.splice(i, 1);
+                    break;
+                }
+            }
         }
     };
 }
